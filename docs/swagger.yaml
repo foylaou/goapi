@@ -1,0 +1,39 @@
+basePath: /
+host: localhost:8081
+info:
+  contact: {}
+  description: 使用 Gin 搭建的 MVC 架構 API 專案
+  title: Go API (MC 架構)
+  version: "1.0"
+paths:
+  /ping:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: 健康檢查
+      tags:
+      - Health
+  /test/{any}:
+    get:
+      parameters:
+      - description: 任意參數
+        in: path
+        name: any
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: 測試參數 API
+      tags:
+      - Test
+swagger: "2.0"
