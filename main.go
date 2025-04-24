@@ -24,6 +24,10 @@ func ensureDatabaseExists() {
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	name := os.Getenv("DB_NAME")
+	if user == "" || pass == "" || host == "" || port == "" || name == "" {
+		println("please set env files")
+		return
+	}
 	dsn := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s", user, pass, host, port, name)
 	masterDSN := dsn
 	db, err := gorm.Open(sqlserver.Open(masterDSN), &gorm.Config{})
@@ -32,7 +36,8 @@ func ensureDatabaseExists() {
 	}
 
 	var exists int64
-	db.Raw("SELECT COUNT(*) FROM sys.databases WHERE name = ?", "gobase").Scan(&exists)
+
+	db.Raw("SELECT COUNT(*) FROM sys.databases WHERE name = ?", name).Scan(&exists)
 	if exists == 0 {
 		db.Exec("CREATE DATABASE gobase")
 		log.Println("✅ gobase 資料庫已建立")
@@ -50,7 +55,12 @@ func main() {
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	name := os.Getenv("DB_NAME")
+	if user == "" || pass == "" || host == "" || port == "" || name == "" {
+
+		return
+	}
 	dsn := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s", user, pass, host, port, name)
+	println(dsn)
 
 	db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
 	if err != nil {
